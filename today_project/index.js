@@ -1,36 +1,65 @@
 const express = require("express");
-
 const app = express();
 
 const users = [
-  { id: 1, name: "Arjun", role: "student" },
-  { id: 2, name: "Priyesha", role: "mentor" }
+  {
+    studentName: "ABDUL HAQUE",
+    university: "SUxCG 714",
+    universityUID: "108444",
+  },
+  {
+    studentName: "ADITYA KUMAR",
+    university: "SUxCG 702",
+    universityUID: "108716",
+  },
+  {
+    studentName: "AMAN KUMAR",
+    university: "SUxCG 702",
+    universityUID: "108500",
+  },
+  {
+    studentName: "AMRIT RAJ",
+    university: "SUxCG 702",
+    universityUID: "108587",
+  },
 ];
-
+ 
 app.get("/", (req, res) => {
-  res.send("Express server is running");
+  res.send("Express server is running 🚀");
 });
-
-
-app.get("/users", (req, res) => {
-    res.status(200).json(users);
+ 
+app.get("/cg", (req, res) => {
+  res.status(200).json(users);
 });
+ 
+app.get("/cg/student/:uid", (req, res) => {
+  const { uid } = req.params;
 
-app.get("/users/:username/:password",(req,res)=>{
-    console.log(req.params);
-    res.status(200).json(users);
-});
+  const student = users.find(
+    (user) => user.universityUID === uid
+  );
 
-app.get("/users/:id", (req, res) => {
-  const userId = Number(req.params.id);
-  const user = users.find(u => u.id === userId);
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
+  if (!student) {
+    return res.status(404).json({ message: "Student not found" });
   }
 
-  res.status(200).json(user);
+  res.status(200).json(student);
 });
+
+app.get("/cg/student/name/:name", (req, res) => {
+  const { name } = req.params;
+
+  const student = users.find(
+    (user) => user.studentName.toLowerCase() === name.toLowerCase()
+  );
+
+  if (!student) {
+    return res.status(404).json({ message: "Student not found" });
+  }
+
+  res.status(200).json(student);
+});
+
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
