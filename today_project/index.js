@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 
 const users = [
   {
@@ -28,11 +29,11 @@ app.get("/", (req, res) => {
   res.send("Express server is running 🚀");
 });
  
-app.get("/cg", (req, res) => {
+app.get("/users", (req, res) => {
   res.status(200).json(users);
 });
  
-app.get("/cg/student/:uid", (req, res) => {
+app.get("/users/:uid", (req, res) => {
   const { uid } = req.params;
 
   const student = users.find(
@@ -45,6 +46,24 @@ app.get("/cg/student/:uid", (req, res) => {
 
   res.status(200).json(student);
 });
+
+app.post("/users", (req, res) => {
+  const data = req.body;
+
+   const newUsers = data.map(user => ({
+      studentName: user.studentName,
+      university: user.university,
+      universityUID: user.universityUID
+    }));
+
+  users.push(...newUsers);
+
+  res.status(201).json({
+    message: "Users added successfully",
+    users
+  });
+});
+
 
 app.get("/cg/student/name/:name", (req, res) => {
   const { name } = req.params;
